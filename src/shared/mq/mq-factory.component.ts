@@ -2,7 +2,7 @@ import { ConfigurationService } from '../configuration/configuration.service';
 import { RabbitMessageQueue } from './rabbit.mq.component';
 import { LoggingService } from '../logging/logging.service';
 
-export const messageFactory = async(configManager: ConfigurationService, loggingService: LoggingService) => {
+export const messageFactory = async (configManager: ConfigurationService, loggingService: LoggingService) => {
     const config = configManager.getSettings();
     const logger = loggingService.getLogger();
     const options: any = {};
@@ -19,4 +19,4 @@ export const messageFactory = async(configManager: ConfigurationService, logging
     await mq.ensureInfrastructure();
 
     return mq;
-}
+};
