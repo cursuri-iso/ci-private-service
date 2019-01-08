@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as winston from 'winston';
-import { createConnection, ConnectionOptions, Connection, FindManyOptions, ObjectLiteral, InsertWriteOpResult, UpdateWriteOpResult } from 'typeorm';
-import { ObjectId } from 'mongodb';
-import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants';
+import { createConnection, ConnectionOptions, Connection, ObjectLiteral } from 'typeorm';
 
 @Injectable()
 export class DatabaseService {
@@ -11,7 +9,7 @@ export class DatabaseService {
     constructor(private options: ConnectionOptions, private logger: winston.Logger) { }
 
     public async connect(): Promise<void> {
-        return new Promise<void>(async(resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             try {
                 if (! (this.connection && this.connection.isConnected)) {
                     this.connection = await createConnection(this.options);
@@ -19,24 +17,17 @@ export class DatabaseService {
                 }
 
                 resolve();
-            } catch(err) {
+            } catch (err) {
                 this.logger.error(`Could not connect to ${this.options.database}: ${JSON.stringify(err)}`);
                 reject(`Cannot open db connection`);
             }
         });
     }
 
-    public async close(): Promise<void> {
-        // await this.connection.close();
-        // this.logger.info('Connection Closed!');
-    }
-
     public async add(collection: any, record: any) {
         await this.connect();
 
         const result = await this.connection.getMongoRepository(collection).save(record);
-        await this.close();
-
         return result;
     }
 
@@ -44,8 +35,6 @@ export class DatabaseService {
         await this.connect();
 
         const result = await this.connection.getMongoRepository(collection).aggregate(pipeline).toArray();
-        await this.close();
-
         return result;
     }
 
@@ -54,36 +43,32 @@ export class DatabaseService {
 
         condition.deleted = null;
 
-        const options = <FindManyOptions<any>>{
-            where: condition
+        const options = {
+            where: condition,
         };
 
         const result = await this.connection.getMongoRepository(collection).findOne(options);
-        await this.close();
-
         return result;
     }
 
-    public async find(collection: any, condition: any, ord?: object, page?: object): Promise<{}[]> {
+    public async find(collection: any, condition: any, ord?: object, page?: any): Promise<any[]> {
         await this.connect();
         condition.deleted = null;
 
-        const options = <FindManyOptions<any>>{
+        const options: any = {
             where: condition,
-            order: { "updated_date": "DESC" }
+            order: { updated_date: 'DESC' },
         };
 
-        ord = ord ? ord : { "updated_date": "DESC" };
+        ord = ord ? ord : { updated_date: 'DESC' };
         options.order = ord;
 
         if (page) {
-            options.take = page['take'];
-            options.skip = page['skip'];
+            options.take = page.take;
+            options.skip = page.skip;
         }
 
         const result = await this.connection.getMongoRepository(collection).find(options);
-        await this.close();
-
         return result;
     }
 
@@ -94,8 +79,6 @@ export class DatabaseService {
         update = { $set: update };
 
         const result = await this.connection.getMongoRepository(collection).findOneAndUpdate(condition, update);
-        await this.close();
-
         return result;
     }
 }

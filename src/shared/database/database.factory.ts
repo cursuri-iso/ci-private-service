@@ -26,10 +26,5 @@ export const databaseServiceFactory = async (configManager: ConfigurationService
     };
 
     const databaseService = new DatabaseService(options, logger);
-    try {
-        await databaseService.connect();
-        return databaseService;
-    } catch (error) {
-        logger.error(error);
-    }
+    return databaseService;
 };

@@ -11,7 +11,10 @@
             "preLaunchTask": "tsc",
             "program": "${workspaceFolder}/src/server.ts",
             "cwd": "${workspaceFolder}",
-            "outFiles": ["${workspaceFolder}/bin/**/*.js"]
+            "outFiles": ["${workspaceFolder}/bin/**/*.js"],
+            "env": {
+                "NODE_PORT":"5001"
+            }
         }
     ]
 }
