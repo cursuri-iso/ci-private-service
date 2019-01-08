@@ -1,7 +1,7 @@
 {
-  "compilerOptions": {
+    "compilerOptions": {
     "module": "commonjs",
-    "declaration": true,
+    "declaration": false,
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
@@ -13,5 +13,12 @@
     "outDir": "./bin",
     "baseUrl": "./"
   },
-  "exclude": ["node_modules"]
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "bin",
+        "**/*.spec.ts"
+    ]
 }
