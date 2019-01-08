@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { ConfigurationService } from './configuration/configuration.service';
 import { configurationServiceFactory } from './configuration/configuration-service.factory';
 import { LoggingService } from './logging/logging.service';
@@ -8,6 +8,7 @@ import { databaseServiceFactory } from './database/database.factory';
 import { RabbitMessageQueue } from './mq/rabbit.mq.component';
 import { messageFactory } from './mq/mq-factory.component';
 
+@Global()
 @Module({
     providers: [
         { provide: ConfigurationService, useFactory: configurationServiceFactory },

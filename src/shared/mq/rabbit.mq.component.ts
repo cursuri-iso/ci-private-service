@@ -40,10 +40,6 @@ export class RabbitMessageQueue {
         });
     }
 
-    public async ensureInfrastructure(): Promise<void> {
-        await this.channel.assertExchange(this.options.exchange, 'topic');
-    }
-
     private delay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

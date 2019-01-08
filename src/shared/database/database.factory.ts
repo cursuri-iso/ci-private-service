@@ -20,7 +20,7 @@ export const databaseServiceFactory = async (configManager: ConfigurationService
         reconnectInterval: process.env.DB_RETRY_TIMEOUT || config.db.retryTimeout || 5000,
         reconnectTries: process.env.DB_RETRY_COUNT || config.db.retryCount || 20,
         entities: [
-            __dirname + '/../../models/*.js',
+            __dirname + '/../../app/models/*.js',
         ],
         synchronize: true,
     };

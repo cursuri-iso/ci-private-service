@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { NestApplicationOptions } from '@nestjs/common/interfaces/nest-application-options.interface';
-
 import * as express from 'express';
+
 import { AppModule } from './app/app.module';
+import { ValidationPipe } from './pipes/validation.pipe';
 
 (async () => {
   try {
@@ -15,6 +16,7 @@ import { AppModule } from './app/app.module';
     };
 
     const app = await NestFactory.create(AppModule, server, options);
+    app.useGlobalPipes(new ValidationPipe());
     await app.listenAsync(port);
 
     const microservice = app.connectMicroservice({});
