@@ -12,8 +12,8 @@ export class ConfigurationService {
 
     public load(): void {
         try {
-            const configuration_content: string = fs.readFileSync(this.configFile, 'utf8');
-            this.config = yaml.safeLoad(configuration_content);
+            const content: string = fs.readFileSync(this.configFile, 'utf8');
+            this.config = yaml.safeLoad(content);
         } catch (e) {
              // tslint:disable-next-line:no-console
              console.log(`Error loading configuration file: ${JSON.stringify(e)}`);
