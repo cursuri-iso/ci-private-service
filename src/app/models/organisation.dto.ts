@@ -9,4 +9,10 @@ export class OrganisationDto implements EntityDto {
 
     @IsUrl()
     logoUrl: string;
+
+    @IsUrl({ require_protocol: true })
+    scheduleUrl: string;
+
+    @IsUrl({ require_protocol: true })
+    registrationUrl: string;
 }
