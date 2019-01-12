@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Res, Query, HttpStatus } from '@nestjs/common';
 
 import { EntitiesService } from './entities.service';
 import { OrganisationDto } from '../models/organisation.dto';
@@ -9,10 +9,24 @@ import { DomainDto } from '../models/domain.dto';
 import { DomainModel } from '../models/domain.model';
 import { LocationDto } from '../models/location.dto';
 import { LocationModel } from '../models/location.model';
+import { PaginationPipe } from '../../pipes/pagination.pipe';
+import { PaginationModel } from '../models/pagination.model';
+import { PagedList, buildPaginationMetadata } from '../models/pagedList.model';
+import { EntityDto } from '../models/entity.dto';
+import 'automapper-ts';
 
 @Controller('entities')
 export class EntitiesController {
     constructor(private service: EntitiesService) {}
+
+    @Get('/organisations')
+    async getOrganisations(@Res() resp, @Query(new PaginationPipe()) pagination?: PaginationModel ) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(OrganisationModel, OrganisationDto, pagination);
+        const meta = buildPaginationMetadata(result, 'organisations');
+
+        resp.set('x-pagination', JSON.stringify(meta));
+        resp.status(HttpStatus.OK).json(result);
+    }
 
     @Post('/organisations')
     async createOrganisation(@Body() dto: OrganisationDto) {

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { RabbitMessageQueue } from '../shared/mq/rabbit.mq.component';
 import { LoggingService } from '../shared/logging/logging.service';
 import { DatabaseService } from '../shared/database/database.service';
@@ -6,6 +7,7 @@ import { SharedModule } from '../shared/shared.module';
 import { EntitiesModule } from './entities/entities.module';
 import { ListenerService } from '../listeners/listener.service';
 import { ListenersModule } from '../listeners/listener.module';
+import 'automapper-ts';
 
 @Module({
     imports: [ SharedModule, EntitiesModule, ListenersModule ],
@@ -20,6 +22,11 @@ export class AppModule {
             await this.mqService.initializeConnection();
             await this.databaseService.connect();
             await this.listener.listen();
+
+            automapper.initialize((config: AutoMapperJs.IConfiguration) => {
+                config.createMap('OrganisationModel', 'OrganisationDto')
+                    .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
+            });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);
         } catch (e) {

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as winston from 'winston';
-import { createConnection, ConnectionOptions, Connection, ObjectLiteral } from 'typeorm';
+import { createConnection, ConnectionOptions, Connection, ObjectLiteral, FindManyOptions } from 'typeorm';
+
+import { PaginationModel } from '../../app/models/pagination.model';
 
 @Injectable()
 export class DatabaseService {
@@ -51,11 +53,11 @@ export class DatabaseService {
         return result;
     }
 
-    public async find(collection: any, condition: any, ord?: object, page?: any): Promise<any[]> {
+    public async find(collection: any, condition: any, ord?: object, page?: PaginationModel): Promise<[any[], number]> {
         await this.connect();
         condition.deleted = null;
 
-        const options: any = {
+        const options: FindManyOptions = {
             where: condition,
             order: { updated_date: 'DESC' },
         };
@@ -64,12 +66,11 @@ export class DatabaseService {
         options.order = ord;
 
         if (page) {
-            options.take = page.take;
-            options.skip = page.skip;
+            options.take = page.pageSize;
+            options.skip = (page.pageNumber - 1) * page.pageSize;
         }
 
-        const result = await this.connection.getMongoRepository(collection).find(options);
-        return result;
+        return await this.connection.getMongoRepository(collection).findAndCount(options);
     }
 
     public async updateOne(collection: any, condition: ObjectLiteral, update: ObjectLiteral) {
