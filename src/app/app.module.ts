@@ -30,6 +30,9 @@ export class AppModule {
                       .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
                 config.createMap('StandardModel', 'StandardDto')
                       .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
+                config.createMap('LocationModel', 'LocationDto')
+                      .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
+                      .forMember('location', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.sourceObject.location.coordinates);
             });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);

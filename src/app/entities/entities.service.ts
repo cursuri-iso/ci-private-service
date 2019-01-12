@@ -32,6 +32,7 @@ export class EntitiesService {
     }
 
     async createEntity(model: ObjectType<EntityModel>, entity: EntityDto): Promise<any> {
+        entity.createdAt = new Date();
         await this.databaseService.add(model, entity);
     }
 }

@@ -1,15 +1,10 @@
-import { Entity, ObjectIdColumn, Column } from 'typeorm';
-import { ObjectId } from 'mongodb';
+import { Entity, Column } from 'typeorm';
 
 import { EntityModel } from './entity.model';
 import { IsString, Length } from 'class-validator';
 
 @Entity('standards')
-export class StandardModel implements EntityModel {
-    @ObjectIdColumn()
-    // tslint:disable-next-line:variable-name
-    _id?: ObjectId;
-
+export class StandardModel extends EntityModel {
     @Column({ nullable: false })
     @IsString()
     @Length(5, 75)

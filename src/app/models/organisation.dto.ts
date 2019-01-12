@@ -2,7 +2,7 @@ import { IsUrl, IsString, Length } from 'class-validator';
 
 import { EntityDto } from './entity.dto';
 
-export class OrganisationDto implements EntityDto {
+export class OrganisationDto extends EntityDto {
     @IsString()
     @Length(5, 75)
     name: string;

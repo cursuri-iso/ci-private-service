@@ -1,6 +1,25 @@
 import { ObjectId } from 'mongodb';
+import { ObjectIdColumn, Column } from 'typeorm';
+import { IsDate, IsBoolean } from 'class-validator';
 
-export abstract class EntityModel {
+export class EntityModel {
+    @ObjectIdColumn()
     // tslint:disable-next-line:variable-name
-    abstract _id?: ObjectId;
+    _id?: ObjectId;
+
+    @Column()
+    @IsDate()
+    createdAt?: Date;
+
+    @Column()
+    @IsDate()
+    modifiedAt?: Date;
+
+    @Column()
+    @IsDate()
+    deletedAt?: Date;
+
+    @Column()
+    @IsBoolean()
+    deleted?: boolean;
 }
