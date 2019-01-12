@@ -35,7 +35,7 @@ export function buildPaginationMetadata<T extends EntityDto>(paginatedList: Page
     };
 
     let url = urlAssembler()
-            .prefix(`/v1`)
+            .prefix(`/entities`)
             .template(`/${collectionName}`);
 
     if (paginatedList.hasNext) {
