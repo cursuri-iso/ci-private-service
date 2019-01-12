@@ -1,8 +1,8 @@
-import { Pipe, PipeTransform, ArgumentMetadata } from '@nestjs/common';
+import { PipeTransform, ArgumentMetadata, Injectable } from '@nestjs/common';
 
 import { PaginationModel } from '../app/models/pagination.model';
 
-@Pipe()
+@Injectable()
 export class PaginationPipe implements PipeTransform<any> {
     transform(value: any, metadata: ArgumentMetadata) {
         const result: PaginationModel = new PaginationModel();

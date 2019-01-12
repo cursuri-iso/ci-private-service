@@ -25,7 +25,11 @@ export class AppModule {
 
             automapper.initialize((config: AutoMapperJs.IConfiguration) => {
                 config.createMap('OrganisationModel', 'OrganisationDto')
-                    .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
+                      .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
+                config.createMap('DomainModel', 'DomainDto')
+                      .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
+                config.createMap('StandardModel', 'StandardDto')
+                      .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
             });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);

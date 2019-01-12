@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectType } from 'typeorm';
+import { ObjectID } from 'mongodb';
 
 import { DatabaseService } from '../../shared/database/database.service';
 import { EntityDto } from '../models/entity.dto';
@@ -17,6 +18,17 @@ export class EntitiesService {
         const mapped = automapper.map(model.name, dto.name, result[0]);
 
         return PagedList.create<EntityDto>(mapped, result[1], pagination.pageNumber, pagination.pageSize);
+    }
+
+    async getEntity(model: ObjectType<EntityModel>, dto: ObjectType<EntityDto>, id: string): Promise<EntityDto> {
+        if (ObjectID.isValid(id)) {
+            const result = await this.databaseService.getOne(model, { _id: new ObjectID(id) });
+            const mapped = automapper.map(model.name, dto.name, result);
+
+            return mapped;
+        }
+
+        return null;
     }
 
     async createEntity(model: ObjectType<EntityModel>, entity: EntityDto): Promise<any> {
