@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+        RABBITMQ_NODENAME: silver-rabbit@localhost
+        RABBITMQ_DEFAULT_USER: rabbitmq
+        RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  ci-private-service:
+    image: cursuriiso/ci-private-service:latest
+    links:
+      - mongodb:mongodb
+      - rabbitmq:rabbitmq
+    ports:
+      - 5001:5001
+    environment:
+      DB_TYPE: mongodb
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      DB_DATABASE: cursuri-iso
+      MQ_HOST: rabbitmq
+      MQ_PORT: 5672
+      MQ_USERNAME: rabbitmq
+      MQ_PASSWORD: rabbitmq
+      MQ_RETRY_COUNT: 10
+      MQ_RETRY_TIMEOUT: 10
