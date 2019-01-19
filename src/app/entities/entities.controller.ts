@@ -45,8 +45,11 @@ export class EntitiesController {
     }
 
     @Get('/standards')
-    async getStandards(@Res() resp, @Query(new PaginationPipe()) pagination?: PaginationModel ) {
-        const result: PagedList<EntityDto> = await this.service.getEntities(StandardModel, StandardDto, pagination);
+    async getStandards(@Res() resp,
+                       @Query(new PaginationPipe()) pagination?: PaginationModel,
+                       @Query(new SortingPipe()) sorting?: SortingModel,
+                       @Query(new SearchPipe()) search?: SearchModel) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(StandardModel, StandardDto, pagination, sorting, search);
         const meta = buildPaginationMetadata(result, 'standards');
 
         resp.set('x-pagination', JSON.stringify(meta));
@@ -64,8 +67,11 @@ export class EntitiesController {
     }
 
     @Get('/domains')
-    async getDomains(@Res() resp, @Query(new PaginationPipe()) pagination?: PaginationModel ) {
-        const result: PagedList<EntityDto> = await this.service.getEntities(DomainModel, DomainDto, pagination);
+    async getDomains(@Res() resp,
+                     @Query(new PaginationPipe()) pagination?: PaginationModel,
+                     @Query(new SortingPipe()) sorting?: SortingModel,
+                     @Query(new SearchPipe()) search?: SearchModel ) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(DomainModel, DomainDto, pagination, sorting, search);
         const meta = buildPaginationMetadata(result, 'domains');
 
         resp.set('x-pagination', JSON.stringify(meta));
@@ -83,8 +89,11 @@ export class EntitiesController {
     }
 
     @Get('/locations')
-    async getLocations(@Res() resp, @Query(new PaginationPipe()) pagination?: PaginationModel ) {
-        const result: PagedList<EntityDto> = await this.service.getEntities(LocationModel, LocationDto, pagination);
+    async getLocations(@Res() resp,
+                       @Query(new PaginationPipe()) pagination?: PaginationModel,
+                       @Query(new SortingPipe()) sorting?: SortingModel,
+                       @Query(new SearchPipe()) search?: SearchModel ) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(LocationModel, LocationDto, pagination, sorting, search);
         const meta = buildPaginationMetadata(result, 'locations');
 
         resp.set('x-pagination', JSON.stringify(meta));
