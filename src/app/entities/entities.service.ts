@@ -9,6 +9,7 @@ import { RabbitMessageQueue } from '../../shared/mq/rabbit.mq.component';
 import { PaginationModel } from '../models/pagination.model';
 import { PagedList } from '../models/pagedList.model';
 import { SortingModel } from '../models/sorting.model';
+import { SearchModel } from '../models/search.model';
 
 @Injectable()
 export class EntitiesService {
@@ -18,8 +19,11 @@ export class EntitiesService {
                       dto: ObjectType<EntityDto>,
                       pagination: PaginationModel,
                       sorting?: SortingModel,
-                      searchQuery?: string): Promise<PagedList<EntityDto>> {
-        const result =  await this.databaseService.find(model, {}, { name: 'ASC' }, pagination);
+                      search?: SearchModel): Promise<PagedList<EntityDto>> {
+        const filter: SearchModel = search || {} as SearchModel;
+        const sort: SortingModel = sorting || new SortingModel({ sortBy: 'name', sortOrder: 'ASC' });
+
+        const result =  await this.databaseService.find(model, filter, sort, pagination);
         const mapped = automapper.map(model.name, dto.name, result[0]);
 
         return PagedList.create<EntityDto>(mapped, result[1], pagination.pageNumber, pagination.pageSize);

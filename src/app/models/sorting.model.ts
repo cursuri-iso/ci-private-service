@@ -2,9 +2,12 @@ export class SortingModel {
     private sortingField: string;
     private sortingDirection: 'ASC' | 'DESC';
 
-    constructor() {
-        this.sortingField = '';
-        this.sortingDirection = 'ASC';
+    constructor(opts: {
+        sortBy?: string,
+        sortOrder?: 'ASC' | 'DESC',
+    } = {}) {
+        this.sortBy = opts.sortBy || '';
+        this.sortOrder = opts.sortOrder || 'ASC';
     }
 
     get sortBy(): string {

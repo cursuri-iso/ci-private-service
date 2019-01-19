@@ -3,6 +3,8 @@ import * as winston from 'winston';
 import { createConnection, ConnectionOptions, Connection, ObjectLiteral, FindManyOptions } from 'typeorm';
 
 import { PaginationModel } from '../../app/models/pagination.model';
+import { SearchModel } from '../../app/models/search.model';
+import { SortingModel } from '../../app/models/sorting.model';
 
 @Injectable()
 export class DatabaseService {
@@ -53,17 +55,35 @@ export class DatabaseService {
         return result;
     }
 
-    public async find(collection: any, condition: any, ord?: object, page?: PaginationModel): Promise<[any[], number]> {
+    public async find(collection: any, condition?: SearchModel, ord?: SortingModel, page?: PaginationModel): Promise<[any[], number]> {
         await this.connect();
-        condition.deleted = null;
 
-        const options: FindManyOptions = {
-            where: condition,
-            order: { updated_date: 'DESC' },
+        const where: any = {
+            deleted: null,
         };
 
-        ord = ord ? ord : { updated_date: 'DESC' };
-        options.order = ord;
+        const order: any = {
+            updated_date: 'DESC',
+        };
+
+        if (condition) {
+            const regexString = `${ condition.queryType === 'CONTAINS' ? '' : '^' }${ condition.queryValue }`;
+            const regex = {
+                $regex: regexString,
+                $options: 'i',
+            };
+
+            where[condition.queryField] = regex;
+        }
+
+        if (ord) {
+            order[ord.sortBy] = ord.sortOrder;
+        }
+
+        const options: FindManyOptions = {
+            where,
+            order,
+        };
 
         if (page) {
             options.take = page.pageSize;
