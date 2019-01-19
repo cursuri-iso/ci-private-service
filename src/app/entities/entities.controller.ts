@@ -13,15 +13,24 @@ import { PaginationPipe } from '../../pipes/pagination.pipe';
 import { PaginationModel } from '../models/pagination.model';
 import { PagedList, buildPaginationMetadata } from '../models/pagedList.model';
 import { EntityDto } from '../models/entity.dto';
+import { SortingPipe } from 'src/pipes/sorting.pipe';
+import { SortingModel } from '../models/sorting.model';
 
 @Controller('entities')
 export class EntitiesController {
     constructor(private service: EntitiesService) {}
 
     @Get('/organisations')
-    async getOrganisations(@Res() resp, @Query(new PaginationPipe()) pagination?: PaginationModel ) {
-        const result: PagedList<EntityDto> = await this.service.getEntities(OrganisationModel, OrganisationDto, pagination);
+    async getOrganisations(@Res() resp,
+                           @Query(new PaginationPipe()) pagination?: PaginationModel,
+                           @Query(new SortingPipe()) sorting?: SortingModel,
+                           @Query('searchQuery') searchQuery?: string ) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(OrganisationModel, OrganisationDto, pagination, sorting, searchQuery);
         const meta = buildPaginationMetadata(result, 'organisations');
+
+        if (searchQuery) {
+            // 
+        }
 
         resp.set('x-pagination', JSON.stringify(meta));
         resp.status(HttpStatus.OK).json(result);

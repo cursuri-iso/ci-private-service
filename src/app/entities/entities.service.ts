@@ -8,12 +8,17 @@ import { EntityModel } from '../models/entity.model';
 import { RabbitMessageQueue } from '../../shared/mq/rabbit.mq.component';
 import { PaginationModel } from '../models/pagination.model';
 import { PagedList } from '../models/pagedList.model';
+import { SortingModel } from '../models/sorting.model';
 
 @Injectable()
 export class EntitiesService {
     constructor(private databaseService: DatabaseService, private mqService: RabbitMessageQueue) {}
 
-    async getEntities(model: ObjectType<EntityModel>, dto: ObjectType<EntityDto>, pagination: PaginationModel): Promise<PagedList<EntityDto>> {
+    async getEntities(model: ObjectType<EntityModel>,
+                      dto: ObjectType<EntityDto>,
+                      pagination: PaginationModel,
+                      sorting?: SortingModel,
+                      searchQuery?: string): Promise<PagedList<EntityDto>> {
         const result =  await this.databaseService.find(model, {}, { name: 'ASC' }, pagination);
         const mapped = automapper.map(model.name, dto.name, result[0]);
 
