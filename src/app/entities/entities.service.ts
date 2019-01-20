@@ -37,10 +37,24 @@ export class EntitiesService {
         return null;
     }
 
-    async createEntity(model: ObjectType<EntityModel>, entity: EntityDto): Promise<any> {
+    async createEntity(model: ObjectType<EntityModel>, dto: ObjectType<EntityDto>, entity: EntityDto): Promise<any> {
         entity.createdAt = new Date();
+        const mapped = automapper.map(dto.name, model.name, entity);
 
-        await this.databaseService.add(model, entity);
+        await this.databaseService.add(model, mapped);
+    }
+
+    async patchEntity(model: ObjectType<EntityModel>, dto: ObjectType<EntityDto>, entity: EntityDto, id: string): Promise<any> {
+        if (ObjectID.isValid(id)) {
+            entity.modifiedAt = new Date();
+            const mapped = automapper.map(dto.name, model.name, entity);
+
+            const result = await this.databaseService.patchOne(model, { _id: new ObjectID(id) }, mapped);
+
+            return result;
+        }
+
+        return null;
     }
 
     async deleteEntity(model: ObjectType<EntityModel>, id: string): Promise<any> {
@@ -49,7 +63,7 @@ export class EntitiesService {
             updatedEntity.deletedAt = new Date();
             updatedEntity.deleted = true;
 
-            await this.databaseService.updateOne(model, { _id: new ObjectID(id) }, updatedEntity);
+            await this.databaseService.patchOne(model, { _id: new ObjectID(id) }, updatedEntity);
         }
     }
 }

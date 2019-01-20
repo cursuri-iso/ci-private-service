@@ -93,13 +93,13 @@ export class DatabaseService {
         return await this.connection.getMongoRepository(collection).findAndCount(options);
     }
 
-    public async updateOne(collection: any, condition: ObjectLiteral, update: ObjectLiteral) {
+    public async patchOne(collection: any, condition: ObjectLiteral, update: any): Promise<any> {
         await this.connect();
 
         condition.deleted = null;
         update = { $set: update };
 
         const result = await this.connection.getMongoRepository(collection).findOneAndUpdate(condition, update);
-        return result;
+        return result.value;
     }
 }

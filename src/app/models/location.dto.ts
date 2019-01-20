@@ -7,5 +7,7 @@ export class LocationDto extends EntityDto {
     @Length(5, 100)
     name: string;
 
-    location: Geolocation;
+    latitude: number;
+
+    longitude: number;
 }

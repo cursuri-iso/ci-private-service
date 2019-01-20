@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Res, Query, HttpStatus, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Res, Query, HttpStatus, Param, Delete, Patch } from '@nestjs/common';
 
 import { EntitiesService } from './entities.service';
 import { OrganisationDto } from '../models/organisation.dto';
@@ -35,17 +35,22 @@ export class EntitiesController {
     }
 
     @Get('/organisations/:id')
-    async getOrganisation(@Param('id') id): Promise<EntityDto> {
+    async getOrganisation(@Param('id') id: string): Promise<EntityDto> {
         return await this.service.getEntity(OrganisationModel, OrganisationDto, id);
     }
 
     @Post('/organisations')
     async createOrganisation(@Body() dto: OrganisationDto) {
-        await this.service.createEntity(OrganisationModel, dto);
+        await this.service.createEntity(OrganisationModel, OrganisationDto, dto);
+    }
+
+    @Patch('/organisations/:id')
+    async patchOrganisation(@Body() dto: any, @Param('id') id: string) {
+        await this.service.patchEntity(OrganisationModel, OrganisationDto, dto, id);
     }
 
     @Delete('/organisations/:id')
-    async removeOrganisation(@Param('id') id) {
+    async removeOrganisation(@Param('id') id: string) {
         await this.service.deleteEntity(OrganisationModel, id);
     }
 
@@ -62,17 +67,22 @@ export class EntitiesController {
     }
 
     @Get('/standards/:id')
-    async getStandard(@Param('id') id): Promise<EntityDto> {
+    async getStandard(@Param('id') id: string): Promise<EntityDto> {
         return await this.service.getEntity(StandardModel, StandardDto, id);
     }
 
     @Post('/standards')
     async createStandard(@Body() dto: StandardDto) {
-        await this.service.createEntity(StandardModel, dto);
+        await this.service.createEntity(StandardModel, StandardDto, dto);
+    }
+
+    @Patch('/standards/:id')
+    async patchStandard(@Body() dto: any, @Param('id') id: string) {
+        await this.service.patchEntity(StandardModel, StandardModel, dto, id);
     }
 
     @Delete('/standards/:id')
-    async removeStandard(@Param('id') id) {
+    async removeStandard(@Param('id') id: string) {
         await this.service.deleteEntity(StandardModel, id);
     }
 
@@ -89,17 +99,22 @@ export class EntitiesController {
     }
 
     @Get('/domains/:id')
-    async getDomain(@Param('id') id): Promise<EntityDto> {
+    async getDomain(@Param('id') id: string): Promise<EntityDto> {
         return await this.service.getEntity(DomainModel, DomainDto, id);
     }
 
     @Post('/domains')
     async createDomain(@Body() dto: DomainDto) {
-        await this.service.createEntity(DomainModel, dto);
+        await this.service.createEntity(DomainModel, DomainDto, dto);
+    }
+
+    @Patch('/domains/:id')
+    async patchDomain(@Body() dto: any, @Param('id') id: string) {
+        await this.service.patchEntity(DomainModel, DomainDto, dto, id);
     }
 
     @Delete('/domains/:id')
-    async removeDomain(@Param('id') id) {
+    async removeDomain(@Param('id') id: string) {
         await this.service.deleteEntity(DomainModel, id);
     }
 
@@ -116,17 +131,22 @@ export class EntitiesController {
     }
 
     @Get('/locations/:id')
-    async getLocation(@Param('id') id): Promise<EntityDto> {
+    async getLocation(@Param('id') id: string): Promise<EntityDto> {
         return await this.service.getEntity(LocationModel, LocationDto, id);
     }
 
     @Post('/locations')
     async createLocation(@Body() dto: LocationDto) {
-        await this.service.createEntity(LocationModel, dto);
+        await this.service.createEntity(LocationModel, LocationDto, dto);
+    }
+
+    @Patch('/locations/:id')
+    async patchLocation(@Body() dto: any, @Param('id') id: string) {
+        await this.service.patchEntity(LocationModel, LocationDto, dto, id);
     }
 
     @Delete('/locations/:id')
-    async removeLocation(@Param('id') id) {
+    async removeLocation(@Param('id') id: string) {
         await this.service.deleteEntity(LocationModel, id);
     }
 }
