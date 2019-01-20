@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Res, Query, HttpStatus, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Res, Query, HttpStatus, Param, Delete } from '@nestjs/common';
 
 import { EntitiesService } from './entities.service';
 import { OrganisationDto } from '../models/organisation.dto';
@@ -44,6 +44,11 @@ export class EntitiesController {
         await this.service.createEntity(OrganisationModel, dto);
     }
 
+    @Delete('/organisations/:id')
+    async removeOrganisation(@Param('id') id) {
+        await this.service.deleteEntity(OrganisationModel, id);
+    }
+
     @Get('/standards')
     async getStandards(@Res() resp,
                        @Query(new PaginationPipe()) pagination?: PaginationModel,
@@ -64,6 +69,11 @@ export class EntitiesController {
     @Post('/standards')
     async createStandard(@Body() dto: StandardDto) {
         await this.service.createEntity(StandardModel, dto);
+    }
+
+    @Delete('/standards/:id')
+    async removeStandard(@Param('id') id) {
+        await this.service.deleteEntity(StandardModel, id);
     }
 
     @Get('/domains')
@@ -88,6 +98,11 @@ export class EntitiesController {
         await this.service.createEntity(DomainModel, dto);
     }
 
+    @Delete('/domains/:id')
+    async removeDomain(@Param('id') id) {
+        await this.service.deleteEntity(DomainModel, id);
+    }
+
     @Get('/locations')
     async getLocations(@Res() resp,
                        @Query(new PaginationPipe()) pagination?: PaginationModel,
@@ -108,5 +123,10 @@ export class EntitiesController {
     @Post('/locations')
     async createLocation(@Body() dto: LocationDto) {
         await this.service.createEntity(LocationModel, dto);
+    }
+
+    @Delete('/locations/:id')
+    async removeLocation(@Param('id') id) {
+        await this.service.deleteEntity(LocationModel, id);
     }
 }

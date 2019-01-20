@@ -20,10 +20,7 @@ export class EntitiesService {
                       pagination: PaginationModel,
                       sorting?: SortingModel,
                       search?: SearchModel): Promise<PagedList<EntityDto>> {
-        const filter: SearchModel = search || {} as SearchModel;
-        const sort: SortingModel = sorting || new SortingModel({ sortBy: 'name', sortOrder: 'ASC' });
-
-        const result =  await this.databaseService.find(model, filter, sort, pagination);
+        const result =  await this.databaseService.find(model, search, sorting, pagination);
         const mapped = automapper.map(model.name, dto.name, result[0]);
 
         return PagedList.create<EntityDto>(mapped, result[1], pagination.pageNumber, pagination.pageSize);
@@ -42,6 +39,17 @@ export class EntitiesService {
 
     async createEntity(model: ObjectType<EntityModel>, entity: EntityDto): Promise<any> {
         entity.createdAt = new Date();
+
         await this.databaseService.add(model, entity);
+    }
+
+    async deleteEntity(model: ObjectType<EntityModel>, id: string): Promise<any> {
+        if (ObjectID.isValid(id)) {
+            const updatedEntity = await this.databaseService.getOne(model, { _id: new ObjectID(id) }) as EntityModel;
+            updatedEntity.deletedAt = new Date();
+            updatedEntity.deleted = true;
+
+            await this.databaseService.updateOne(model, { _id: new ObjectID(id) }, updatedEntity);
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { PipeTransform, ArgumentMetadata, Injectable } from '@nestjs/common';
+import { PipeTransform, ArgumentMetadata, Injectable, BadRequestException } from '@nestjs/common';
 
 import { SearchModel } from '../app/models/search.model';
 
@@ -19,6 +19,14 @@ export class SearchPipe implements PipeTransform<any> {
             result.queryValue = value.queryValue;
         }
 
-        return result;
+        if (this.validate(result)) {
+            return result;
+        }
+
+        return null;
+    }
+
+    private validate(value: SearchModel): boolean {
+        return value.queryField !== '' && value.queryValue !== '';
     }
 }

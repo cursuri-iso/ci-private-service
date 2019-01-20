@@ -1,4 +1,4 @@
-import { PipeTransform, ArgumentMetadata, Injectable } from '@nestjs/common';
+import { PipeTransform, ArgumentMetadata, Injectable, BadRequestException } from '@nestjs/common';
 
 import { SortingModel } from '../app/models/sorting.model';
 
@@ -15,6 +15,14 @@ export class SortingPipe implements PipeTransform<any> {
             result.sortOrder = value.sortOrder;
         }
 
-        return result;
+        if (this.validate(result)) {
+            return result;
+        }
+
+        return null;
     }
+
+    private validate(value: SortingModel): boolean {
+        return value.sortBy !== '';
+  }
 }
