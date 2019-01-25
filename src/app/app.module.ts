@@ -73,7 +73,13 @@ export class AppModule {
                       .forMember('longitude', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
                       .forMember('latitude', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
 
+                config.createMap('TrainingModel', 'TrainingDto')
+                      .forMember('_id', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
+                      .forMember('createdAt', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
+                      .forMember('modifiedAt', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
+                      .forMember('deletedAt', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
 
+                config.createMap('TrainingDto', 'TrainingModel');
             });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);
