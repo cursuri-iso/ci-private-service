@@ -17,6 +17,8 @@ import { SortingPipe } from '../../pipes/sorting.pipe';
 import { SortingModel } from '../models/sorting.model';
 import { SearchPipe } from '../../pipes/search.pipe';
 import { SearchModel } from '../models/search.model';
+import { TrainingDto } from '../models/training.dto';
+import { TrainingModel } from '../models/training.model';
 
 @Controller('entities')
 export class EntitiesController {
@@ -148,5 +150,10 @@ export class EntitiesController {
     @Delete('/locations/:id')
     async removeLocation(@Param('id') id: string) {
         await this.service.deleteEntity(LocationModel, id);
+    }
+
+    @Post('/trainings')
+    async createTraining(@Body() dto: TrainingDto) {
+        await this.service.createEntity(TrainingModel, TrainingDto, dto);
     }
 }

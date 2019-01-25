@@ -73,6 +73,7 @@ export class AppModule {
                       .forMember('longitude', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore)
                       .forMember('latitude', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
 
+
             });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);
