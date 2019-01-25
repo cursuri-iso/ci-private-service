@@ -152,8 +152,35 @@ export class EntitiesController {
         await this.service.deleteEntity(LocationModel, id);
     }
 
+    @Get('/trainings')
+    async getTrainings(@Res() resp,
+                       @Query(new PaginationPipe()) pagination?: PaginationModel,
+                       @Query(new SortingPipe()) sorting?: SortingModel,
+                       @Query(new SearchPipe()) search?: SearchModel ) {
+        const result: PagedList<EntityDto> = await this.service.getEntities(TrainingModel, TrainingDto, pagination, sorting, search);
+        const meta = buildPaginationMetadata(result, 'trainings');
+
+        resp.set('x-pagination', JSON.stringify(meta));
+        resp.status(HttpStatus.OK).json(result);
+    }
+
+    @Get('/trainings/:id')
+    async getTraining(@Param('id') id: string): Promise<EntityDto> {
+        return await this.service.getEntity(TrainingModel, TrainingDto, id);
+    }
+
     @Post('/trainings')
     async createTraining(@Body() dto: TrainingDto) {
         await this.service.createEntity(TrainingModel, TrainingDto, dto);
+    }
+
+    @Patch('/trainings/:id')
+    async patchTraining(@Body() dto: any, @Param('id') id: string) {
+        await this.service.patchEntity(TrainingModel, TrainingDto, dto, id);
+    }
+
+    @Delete('/trainings/:id')
+    async removeTraining(@Param('id') id: string) {
+        await this.service.deleteEntity(TrainingModel, id);
     }
 }

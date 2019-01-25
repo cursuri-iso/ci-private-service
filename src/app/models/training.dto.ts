@@ -31,8 +31,7 @@ export class TrainingDto extends EntityDto {
     org_uuid: string;
 
     @IsArray()
-    @IsOptional()
-    tags?: string[];
+    tags: string[];
 
     @ArrayNotEmpty({ message: 'Selectati cel putin un standard' })
     standards: string[];
