@@ -7,6 +7,11 @@ import { ProgramDto } from '../models/program.dto';
 export class ProgramsController {
     constructor(private service: ProgramsService) {}
 
+    @Get('/:org_id/:training_id')
+    async getProgram(@Param('org_id') orgId: string, @Param('training_id') trainingId: string) {
+        return await this.service.getProgram(orgId, trainingId);
+    }
+
     @Post()
     async createProgram(@Body() dto: ProgramDto) {
         await this.service.createProgram(dto);
