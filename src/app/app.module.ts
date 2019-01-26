@@ -80,6 +80,9 @@ export class AppModule {
                       .forMember('deletedAt', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.ignore);
 
                 config.createMap('TrainingDto', 'TrainingModel');
+
+                config.createMap('ProgramDto', 'ProgramModel')
+                      .forMember('schedules', (opts: AutoMapperJs.IMemberConfigurationOptions) => opts.sourceObject.schedules.forEach(schedule => schedule.startDate = new Date(schedule.startDate)));
             });
 
             this.loggingService.getLogger().info(`Successfully initialised ci-private-service`);
