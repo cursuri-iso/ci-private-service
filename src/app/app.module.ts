@@ -8,7 +8,6 @@ import { EntitiesModule } from './entities/entities.module';
 import { ListenerService } from '../listeners/listener.service';
 import { ListenersModule } from '../listeners/listener.module';
 import 'automapper-ts';
-import { type } from 'os';
 
 @Module({
     imports: [ SharedModule, EntitiesModule, ListenersModule ],
