@@ -3,14 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { EntitiesService } from './entities.service';
 import { SharedModule } from '../../shared/shared.module';
-import { DomainModel } from '../models/domain.model';
-import { DomainDto } from '../models/domain.dto';
 import { PaginationModel } from '../models/pagination.model';
 import { PagedList } from '../models/pagedList.model';
-import { StandardModel } from '../models/standard.model';
-import { StandardDto } from '../models/standard.dto';
-import { LocationModel } from '../models/location.model';
-import { LocationDto } from '../models/location.dto';
+import * as models from '../models';
 
 describe('EntitiesService', () => {
   let service: EntitiesService;
@@ -87,17 +82,27 @@ describe('EntitiesService', () => {
   });
 
   it('should retrieve domains', async () => {
-    const domains = await service.getEntities(DomainModel, DomainDto, new PaginationModel());
+    const domains = await service.getEntities(models.DomainModel, models.DomainDto, new PaginationModel());
     expect(domains).toBeInstanceOf(PagedList);
   });
 
   it('should retrieve standards', async () => {
-    const standards = await service.getEntities(StandardModel, StandardDto, new PaginationModel());
+    const standards = await service.getEntities(models.StandardModel, models.StandardDto, new PaginationModel());
     expect(standards).toBeInstanceOf(PagedList);
   });
 
   it('should retrieve locations', async () => {
-    const locations = await service.getEntities(LocationModel, LocationDto, new PaginationModel());
+    const locations = await service.getEntities(models.LocationModel, models.LocationDto, new PaginationModel());
     expect(locations).toBeInstanceOf(PagedList);
+  });
+
+  it('should retrieve organisations', async () => {
+    const organisations = await service.getEntities(models.OrganisationModel, models.OrganisationDto, new PaginationModel());
+    expect(organisations).toBeInstanceOf(PagedList);
+  });
+
+  it('should retrieve trainings', async () => {
+    const trainings = await service.getEntities(models.TrainingModel, models.TrainingDto, new PaginationModel());
+    expect(trainings).toBeInstanceOf(PagedList);
   });
 });
